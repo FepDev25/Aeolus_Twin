@@ -16,20 +16,20 @@ def print_header(text):
 
 def test_python_version():
     """Verifica la versión de Python."""
-    print("\n🐍 Verificando Python...")
+    print("\nVerificando Python...")
     version = sys.version_info
     print(f"   Versión: {version.major}.{version.minor}.{version.micro}")
     
     if version.major >= 3 and version.minor >= 10:
-        print("   ✅ Versión de Python OK")
+        print("   Versión de Python OK")
         return True
     else:
-        print("   ❌ Se requiere Python 3.10 o superior")
+        print("   Se requiere Python 3.10 o superior")
         return False
 
 def test_dependencies():
     """Verifica que todas las dependencias estén instaladas."""
-    print("\n📦 Verificando dependencias...")
+    print("\nVerificando dependencias...")
     
     required = [
         ('streamlit', 'Streamlit'),
@@ -44,16 +44,16 @@ def test_dependencies():
     for module, name in required:
         try:
             __import__(module)
-            print(f"   ✅ {name}")
+            print(f"   [OK] {name}")
         except ImportError:
-            print(f"   ❌ {name} - NO INSTALADO")
+            print(f"   [FAIL] {name} - NO INSTALADO")
             all_ok = False
     
     return all_ok
 
 def test_project_structure():
     """Verifica la estructura del proyecto."""
-    print("\n📁 Verificando estructura del proyecto...")
+    print("\nVerificando estructura del proyecto...")
     
     project_root = Path(__file__).parent.parent.parent
     
@@ -74,16 +74,16 @@ def test_project_structure():
     for rel_path, description in required_paths:
         full_path = project_root / rel_path
         if full_path.exists():
-            print(f"   ✅ {description}")
+            print(f"   [OK] {description}")
         else:
-            print(f"   ❌ {description} - NO ENCONTRADO: {rel_path}")
+            print(f"   [FAIL] {description} - NO ENCONTRADO: {rel_path}")
             all_ok = False
     
     return all_ok
 
 def test_ml_engine():
     """Prueba el motor ML."""
-    print("\n🤖 Probando ML Engine...")
+    print("\nProbando ML Engine...")
     
     try:
         from ml_engine import WindTurbineBrain
@@ -91,7 +91,7 @@ def test_ml_engine():
         brain = WindTurbineBrain()
         
         if not brain.is_ready:
-            print("   ❌ ML Engine no está listo")
+            print("   [FAIL] ML Engine no está listo")
             return False
         
         # Test de predicción
@@ -105,16 +105,16 @@ def test_ml_engine():
         print(f"   Estado: {status}")
         print(f"   Anomalía: {anomaly}")
         print(f"   Score: {score:.4f}")
-        print("   ✅ ML Engine funcionando correctamente")
+        print("   [OK] ML Engine funcionando correctamente")
         return True
         
     except Exception as e:
-        print(f"   ❌ Error: {e}")
+        print(f"   [FAIL] Error: {e}")
         return False
 
 def test_dashboard_manager():
     """Prueba el gestor del dashboard."""
-    print("\n📊 Probando Dashboard Manager...")
+    print("\nProbando Dashboard Manager...")
     
     try:
         from dashboard_manager import DashboardManager
@@ -128,7 +128,7 @@ def test_dashboard_manager():
             power_kw=4000,
             voltage_kv=34.5,
             apparent_power_kva=4100,
-            health_status="🟢 OPERATIVO",
+            health_status="OPERATIVO",
             is_anomaly=False,
             ml_score=0.05
         )
@@ -136,21 +136,21 @@ def test_dashboard_manager():
         latest = manager.get_latest_telemetry()
         
         if latest is None:
-            print("   ❌ No se pudo agregar telemetría")
+            print("   [FAIL] No se pudo agregar telemetría")
             return False
         
         print(f"   Puntos en historial: {len(manager.history)}")
         print(f"   Última potencia: {latest['power_kw']:.2f} kW")
-        print("   ✅ Dashboard Manager funcionando correctamente")
+        print("   [OK] Dashboard Manager funcionando correctamente")
         return True
         
     except Exception as e:
-        print(f"   ❌ Error: {e}")
+        print(f"   [FAIL] Error: {e}")
         return False
 
 def test_config():
     """Verifica el archivo de configuración."""
-    print("\n⚙️  Verificando configuración...")
+    print("\nVerificando configuración...")
     
     try:
         from config import NETWORK, CONTROL, ML_CONFIG, DASHBOARD
@@ -159,16 +159,16 @@ def test_config():
         print(f"   Puerto: {NETWORK['port']}")
         print(f"   Referencia objetivo: {CONTROL['target_reference']} pu")
         print(f"   Historial máximo: {DASHBOARD['refresh_interval']} puntos")
-        print("   ✅ Configuración cargada correctamente")
+        print("   [OK] Configuración cargada correctamente")
         return True
         
     except Exception as e:
-        print(f"   ❌ Error: {e}")
+        print(f"   [FAIL] Error: {e}")
         return False
 
 def test_ports():
     """Verifica que el puerto esté disponible."""
-    print("\n🔌 Verificando disponibilidad de puerto...")
+    print("\nVerificando disponibilidad de puerto...")
     
     import socket
     
@@ -177,10 +177,10 @@ def test_ports():
         s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         s.bind(('localhost', 30001))
         s.close()
-        print("   ✅ Puerto 30001 disponible")
+        print("   [OK] Puerto 30001 disponible")
         return True
     except OSError:
-        print("   ⚠️  Puerto 30001 en uso (puede ser normal si el servidor está corriendo)")
+        print("   [WARN] Puerto 30001 en uso (puede ser normal si el servidor está corriendo)")
         return True  # No es un error crítico
 
 def main():
@@ -209,21 +209,21 @@ def main():
     total = len(results)
     
     for test_name, result in results.items():
-        status = "✅ PASS" if result else "❌ FAIL"
+        status = "[PASS]" if result else "[FAIL]"
         print(f"   {status} - {test_name}")
     
     print(f"\n   Total: {passed}/{total} tests pasados")
     
     if passed == total:
-        print("\n   🎉 ¡Todos los tests pasaron! El sistema está listo.")
-        print("\n   Próximo paso:")
+        print("\nTodos los tests pasaron! El sistema está listo.")
+        print("\nPróximo paso:")
         print("   1. Ejecutar dashboard: streamlit run dashboard.py")
         print("   2. O ejecutar servidor: python server_core.py")
         print("   3. Iniciar simulación en MATLAB/Simulink")
         return 0
     else:
-        print("\n   ⚠️  Algunos tests fallaron. Revisa los errores arriba.")
-        print("\n   Acciones sugeridas:")
+        print("\nAlgunos tests fallaron. Revisa los errores arriba.")
+        print("\nAcciones sugeridas:")
         if not results['Dependencias']:
             print("   - Instalar dependencias: pip install -r ../../requirements.txt")
         if not results['Estructura']:
