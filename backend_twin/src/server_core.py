@@ -4,6 +4,7 @@ import time
 import math
 import logging
 import os
+from pathlib import Path
 from ml_engine import WindTurbineBrain
 
 # Configuración básica de Logs
@@ -19,10 +20,9 @@ class DigitalTwinServer:
     Gestiona la comunicación con Simulink y el módulo de ML.
     """
 
-    def __init__(self, host='localhost', port=30001, model_dir='../models'):
+    def __init__(self, host='localhost', port=30001, model_dir=None):
         self.host = host
         self.port = port
-        self.model_dir = model_dir
         
         # Configuración de Comunicación (Structs)
         self.struct_in = '<4d'  # wm, P, V, S
@@ -132,6 +132,6 @@ class DigitalTwinServer:
         print("="*50)
 
 if __name__ == "__main__":
-    # se corre desde 'backend_twin/src/'
-    server = DigitalTwinServer(model_dir='../models')
+    # Auto-detecta la ruta de modelos
+    server = DigitalTwinServer()
     server.start()

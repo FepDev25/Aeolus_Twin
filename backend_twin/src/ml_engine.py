@@ -2,6 +2,7 @@ import joblib
 import pandas as pd
 import os
 import logging
+from pathlib import Path
 
 # Configuración de logs si se ejecuta este módulo por separado
 if __name__ == "__main__":
@@ -13,12 +14,19 @@ class WindTurbineBrain:
     Encapsula la lógica de carga de modelos y predicción de anomalías.
     """
 
-    def __init__(self, model_dir='../models'):
+    def __init__(self, model_dir=None):
         """
         Inicializa el motor de ML.
         :param model_dir: Ruta relativa o absoluta a la carpeta 'models/' donde están los .pkl
         """
-        self.model_dir = model_dir
+        # Auto-detectar la ruta de modelos si no se especifica
+        if model_dir is None:
+            current_file = Path(__file__).resolve()
+            self.model_dir = current_file.parent.parent / 'models'
+        else:
+            self.model_dir = Path(model_dir)
+        
+        self.model_dir = str(self.model_dir)
         self.scaler = None
         self.model = None
         self.is_ready = False

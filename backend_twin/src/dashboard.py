@@ -27,7 +27,7 @@ if 'dashboard_manager' not in st.session_state:
     st.session_state.dashboard_manager = DashboardManager(max_history_points=500)
 
 if 'ml_engine' not in st.session_state:
-    st.session_state.ml_engine = WindTurbineBrain(model_dir='../models')
+    st.session_state.ml_engine = WindTurbineBrain()  # Auto-detecta model_dir
 
 if 'server_active' not in st.session_state:
     st.session_state.server_active = False
@@ -195,10 +195,13 @@ with st.sidebar:
         st.rerun()
     
     if st.button("Exportar CSV", use_container_width=True):
+        from pathlib import Path
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filepath = f"../logs/telemetry_{timestamp}.csv"
-        if st.session_state.dashboard_manager.export_to_csv(filepath):
-            st.success(f"Exportado: {filepath}")
+        logs_dir = Path(__file__).parent.parent / 'logs'
+        logs_dir.mkdir(exist_ok=True)
+        filepath = logs_dir / f"telemetry_{timestamp}.csv"
+        if st.session_state.dashboard_manager.export_to_csv(str(filepath)):
+            st.success(f"✅ Exportado: {filepath.name}")
 
 # LAYOUT PRINCIPAL
 manager = st.session_state.dashboard_manager
