@@ -46,6 +46,12 @@ def render_sidebar(controls: Dict[str, float], on_start, on_stop) -> Dict[str, f
         else:
             st.warning("Servidor Inactivo")
         
+        # Información del archivo de registro
+        if 'csv_filepath' in st.session_state:
+            import os
+            filename = os.path.basename(st.session_state.csv_filepath)
+            st.info(f"Registro: `{filename}`")
+        
         # Botones de control (opcional, para control manual)
         st.markdown("**Control Manual del Servidor**")
         col1, col2 = st.columns(2)
