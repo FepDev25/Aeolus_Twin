@@ -76,7 +76,7 @@ def render_metrics_panel(latest_data: Dict[str, Any], history: pd.DataFrame) -> 
         st.markdown(turbine_html, unsafe_allow_html=True)
     
     with col_ai:
-        st.markdown("###Diagnóstico IA (Isolation Forest)")
+        st.markdown("### Diagnóstico IA (Isolation Forest)")
         
         anomaly_html = get_anomaly_status_html(
             latest_data['Status'],

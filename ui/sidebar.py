@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 from typing import Dict
 
 from config.settings import ui_config
@@ -39,17 +40,27 @@ def render_sidebar(controls: Dict[str, float], on_start, on_stop) -> Dict[str, f
         
         st.markdown("---")
         
-        # Botones de control
+        # Estado del servidor
+        if 'server_started' in st.session_state and st.session_state.server_started:
+            st.success("Servidor TCP Activo (Auto-iniciado)")
+        else:
+            st.warning("Servidor Inactivo")
+        
+        # Botones de control (opcional, para control manual)
+        st.markdown("**Control Manual del Servidor**")
         col1, col2 = st.columns(2)
         
         with col1:
-            if st.button("🟢 INICIAR", type="primary", use_container_width=True):
+            if st.button("🔄 REINICIAR", type="primary", use_container_width=True):
+                on_stop()
+                time.sleep(0.2)
                 on_start()
-                st.success("Servidor iniciado")
+                st.success("Servidor reiniciado")
         
         with col2:
             if st.button("🛑 DETENER", use_container_width=True):
                 on_stop()
+                st.session_state.server_started = False
                 st.info("Servidor detenido")
         
         st.caption("Estado: En Línea | Elecaustro V2.0 AI")
