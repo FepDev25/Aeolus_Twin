@@ -5,6 +5,7 @@ Sistema de monitoreo y control para turbina PMSG con detección de anomalías
 Versión: 2.0 AI
 """
 import streamlit as st
+import pandas as pd
 import queue
 import time
 
@@ -59,6 +60,11 @@ def initialize_session_state() -> None:
     if not st.session_state.server_started:
         st.session_state.tcp_server.start()
         st.session_state.server_started = True
+    
+    # Crear archivo CSV para esta sesión
+    if 'csv_filepath' not in st.session_state:
+        st.session_state.csv_filepath = DataProcessor.create_csv_file()
+        print(f"Archivo de registro creado: {st.session_state.csv_filepath}")
 
 # Inicia el servidor TCP/IP
 def start_server() -> None:
@@ -71,18 +77,30 @@ def stop_server() -> None:
 # Procesa actualizaciones de datos desde la cola
 # Returns: True si hubo actualizaciones, False en caso contrario
 def process_data_updates() -> bool:
+    # Extraer datos nuevos de la cola antes de procesar
+    new_data = []
+    while not st.session_state.data_queue.empty():
+        new_data.append(st.session_state.data_queue.get())
     
-    updated_history = DataProcessor.process_queue(
-        st.session_state.data_queue,
-        st.session_state.history
+    if not new_data:
+        return False
+    
+    # Guardar en CSV
+    DataProcessor.save_to_csv(
+        st.session_state.csv_filepath,
+        new_data,
+        st.session_state.shared_controls
     )
     
-    if updated_history is not None:
-        st.session_state.history = updated_history
-        time.sleep(0.05)
-        return True
+    # Actualizar historial en memoria
+    new_df = pd.DataFrame(new_data)
+    st.session_state.history = pd.concat(
+        [st.session_state.history, new_df],
+        ignore_index=True
+    ).tail(ui_config.MAX_HISTORY_SIZE)
     
-    return False
+    time.sleep(0.05)
+    return True
 
 # Renderiza el contenido principal de la aplicación
 def render_main_content() -> None:
