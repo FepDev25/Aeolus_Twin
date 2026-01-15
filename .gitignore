@@ -4,3 +4,7 @@
 legacy/
 
 __pycache__/
+
+# Archivos de datos y logs
+data_logs/
+*.csv

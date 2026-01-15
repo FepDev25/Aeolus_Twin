@@ -109,6 +109,11 @@ La aplicación se abrirá en `http://localhost:8501`
   - Curva de potencia aparente
   - Dinámica del rotor
 
+- **Registro automático de datos**:
+  - Cada sesión genera un archivo CSV único en `data_logs/`
+  - Incluye timestamp, parámetros operacionales y predicciones IA
+  - Formato: `turbina_log_YYYYMMDD_HHMMSS.csv`
+
 ## Configuración
 
 Todas las configuraciones están centralizadas en `config/settings.py`:
