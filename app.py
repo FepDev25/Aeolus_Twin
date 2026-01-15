@@ -51,6 +51,14 @@ def initialize_session_state() -> None:
             controls=st.session_state.shared_controls,
             ml_engine=st.session_state.ml_engine
         )
+    
+    # Auto-iniciar el servidor en el primer renderizado
+    if 'server_started' not in st.session_state:
+        st.session_state.server_started = False
+    
+    if not st.session_state.server_started:
+        st.session_state.tcp_server.start()
+        st.session_state.server_started = True
 
 # Inicia el servidor TCP/IP
 def start_server() -> None:
@@ -113,11 +121,20 @@ def main() -> None:
     st.session_state.shared_controls.update(updated_controls)
     
     # Procesar actualizaciones de datos
-    if process_data_updates():
-        st.rerun()
+    has_new_data = process_data_updates()
     
     # Renderizar contenido principal
     render_main_content()
+    
+    # Auto-refresco continuo para actualización en tiempo real
+    # Se refresca cada 100ms si hay datos, o cada 500ms si está esperando conexión
+    if has_new_data:
+        time.sleep(0.1)  # 100ms entre actualizaciones cuando hay datos
+        st.rerun()
+    else:
+        # Refresco más lento cuando no hay datos (espera conexión)
+        time.sleep(0.5)
+        st.rerun()
 
 
 if __name__ == "__main__":
