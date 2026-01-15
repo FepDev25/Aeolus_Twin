@@ -5,7 +5,7 @@ from typing import Tuple
 @dataclass
 class NetworkConfig:
     # Configuración de red TCP/IP
-    HOST: str = '127.0.0.1'
+    HOST: str = '0.0.0.0'
     PORT: int = 30001
     TIMEOUT: float = 2.0
     FORMAT_IN: str = '<4d'  # wm, P, V, S
