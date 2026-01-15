@@ -1,6 +1,6 @@
 # entorno virtual de Python
 .venv/
-
+venv/
 legacy/
 
 __pycache__/
