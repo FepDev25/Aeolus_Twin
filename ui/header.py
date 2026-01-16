@@ -6,7 +6,7 @@ def render_header() -> None:
     
     with col_logo:
         try:
-            st.image("Logo.png", use_container_width=True)
+            st.image("Logo1.png", use_container_width=True)
         except:
             st.header("🔋")
     
