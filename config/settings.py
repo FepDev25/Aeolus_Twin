@@ -51,8 +51,18 @@ class PhysicsConfig:
     V_TO_KV: float = 1000.0
 
 
+@dataclass
+class FilePlayerConfig:
+    # Configuración del reproductor de archivos parquet
+    DEFAULT_INTERVAL: float = 2.0   # segundos entre filas
+    MIN_INTERVAL: float = 0.5
+    MAX_INTERVAL: float = 10.0
+    DATA_DIR: str = 'data'
+
+
 # Instancias globales de configuración
 network_config = NetworkConfig()
 ml_config = MLConfig()
 ui_config = UIConfig()
 physics_config = PhysicsConfig()
+file_player_config = FilePlayerConfig()
