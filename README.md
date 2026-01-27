@@ -12,7 +12,7 @@ Sistema de monitoreo y control SCADA para turbina de generador síncrono de iman
 
 ## Estructura del Proyecto
 
-```
+```bash
 app-final/
 ├── app.py                      # Punto de entrada principal
 ├── config/
@@ -60,6 +60,7 @@ pip install -r requirements.txt
 ### 1. Compilar S-Function (solo primera vez)
 
 En MATLAB:
+
 ```matlab
 cd /path/to/app-final
 mex sfun_tcp_gateway.c
@@ -134,7 +135,7 @@ Todas las configuraciones están centralizadas en `config/settings.py`:
 
 ### Flujo de Datos
 
-```
+```bash
 Simulink → TCP Server → ML Inference → Data Queue → UI Components
               ↓                                          ↑
          Control Loop ← ← ← ← ← ← ← ← ← ← User Controls
